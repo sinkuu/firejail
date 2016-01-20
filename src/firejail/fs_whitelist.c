@@ -260,11 +260,14 @@ static void whitelist_path(ProfileEntry *entry) {
 
 	// process directory
 	if (S_ISDIR(s.st_mode)) {	
-		// create directory
-		int rv = mkdir(path, 0755);
-		if (rv == -1)
-			errExit("mkdir");
-		
+		// create directory if not exist
+		struct stat sp;
+		if (stat(path, &sp) == 0) {
+			int rv = mkdir(path, 0755);
+			if (rv == -1)
+				errExit("mkdir");
+		}
+
 	}
 	
 	// process regular file
